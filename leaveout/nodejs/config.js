@@ -11,6 +11,8 @@ const privateData = {
   JZLXDH: "", // 家长联系电话
   DSXM: "", // 导师姓名
   DSDH: "", // 导师电话
+  FDYXM: "", // 辅导员姓名
+  FDYDH: "", // 辅导员电话
 }
 
 const account = {

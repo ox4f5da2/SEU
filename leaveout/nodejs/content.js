@@ -34,8 +34,6 @@ const commonData = {
   CCHBH: "",
   SQBH: "",
   XSBH: "",
-  FDYXM: "蒋心造",
-  FDYDH: "15365011131",
   SFDSQ: "0"
 }
 

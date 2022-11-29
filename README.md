@@ -4,7 +4,7 @@
     - [python 版本](#python-版本)
       - [注意⚠️](#注意️)
     - [nodejs 版本](#nodejs-版本)
-  - [抢场馆](#抢场馆)
+  - [抢场馆 seize](#抢场馆-seize)
     - [python 版本](#python-版本-1)
       - [注意⚠️](#注意️-1)
   - [开源协议](#开源协议)
@@ -42,7 +42,7 @@
 
 
 
-## 抢场馆
+## 抢场馆 seize
 
 ### python 版本
 - 首先需要运行命令 `pip3 install -r requirements.txt`，这里需要终端运行地址与 `requirements.txt` 文件所在位置关系

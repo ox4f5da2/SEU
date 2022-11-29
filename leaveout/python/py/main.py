@@ -14,15 +14,8 @@ def readTxt(path):
   """
     读取文件
   """
-  try:
-    with open("{}/txt/{}".format(dir_path, path), encoding="utf-8") as f:
-      config = eval(f.read())
-  except FileNotFoundError:
-    writeLog(startTime, "请检查文件是否与程序位于同一路径", "")
-    sys.exit(1)
-  except SyntaxError:
-    writeLog(startTime, "请检查配置文件格式是否正确", "")
-    sys.exit(1)
+  with open("{}/txt/{}".format(dir_path, path), encoding="utf-8") as f:
+    config = eval(f.read())
   return config
 
 
@@ -133,7 +126,7 @@ def qj(common, qj_data, cookies, cnt, maxFailNum):
   return "请假成功!"
 
 
-def writeLog(startTime, res1, res2):
+def writeLog(startTime, runTime, logList):
   """
     打印日志
   """
@@ -144,18 +137,25 @@ def writeLog(startTime, res1, res2):
   if not os.path.exists(filename):
     os.system(r"touch {}".format(filename))
   log = open(filename, mode="a")
-  log.write("---------- start ----------\n运行程序时间: {}\n{}\n{}\n---------- end ----------\n\n".format(startTime, res1, res2))
-
+  log.write("--------------- Leave Out ---------------\n运行程序时间: {}\n".format(startTime))
+  for key in logList:
+    log.write("- - - - - start - - - - -\n请假人: {}\n{}\n{}\n- - - - - end - - - - -\n\n".format(key, logList[key][0], logList[key][1]))
+  log.write("总耗时: {} 秒\n--------------- All Completed ---------------\n\n".format(runTime))
 
 if __name__ == "__main__":
-  startTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+  start = time.time()
+  startTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(start))
   config = readTxt("config.txt")
-  common = readTxt("common.txt")
-  timeData = getTime(config["cron"]["delta"])
-  qj_data = { **config["privateData"], **common["commonData"], **timeData }
-  MOD_AUTH_CAS = awaitFun(getCookie(common["pageURL"][0], config["account"], "MOD_AUTH_CAS"))
-  _WEU = awaitFun(getCookie(common["pageURL"][1], config["account"], "_WEU"))
-  cookie = { "MOD_AUTH_CAS": MOD_AUTH_CAS, "_WEU": _WEU }
-  res1 = xj(common, config, cookie, 0, 10)
-  res2 = qj(common, qj_data, cookie, 0, 10)
-  writeLog(startTime, res1, res2)
+  logList = {} # 存储日志
+  for user in config["users"]:
+    common = readTxt("common.txt")
+    timeData = getTime(config["cron"]["delta"])
+    qj_data = { **user["privateData"], **common["commonData"], **timeData }
+    MOD_AUTH_CAS = awaitFun(getCookie(common["pageURL"][0], user["account"], "MOD_AUTH_CAS"))
+    _WEU = awaitFun(getCookie(common["pageURL"][1], user["account"], "_WEU"))
+    cookie = { "MOD_AUTH_CAS": MOD_AUTH_CAS, "_WEU": _WEU }
+    res1 = xj(common, user, cookie, 0, 10)
+    res2 = qj(common, qj_data, cookie, 0, 10)
+    logList[user["name"]] = [res1, res2]
+    print("已经完成申请人为 {} 的请假!".format(user["name"]))
+  writeLog(startTime, round(time.time(), 3) - start, logList)

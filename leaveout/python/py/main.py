@@ -138,7 +138,10 @@ def writeLog(startTime, res1, res2):
   """
     打印日志
   """
-  filename = "{}/log/{}-log.txt".format(dir_path, getYearAndMonth())
+  dirname = "{}/log".format(dir_path)
+  filename = "{}/{}-log.txt".format(dirname, getYearAndMonth())
+  if not os.path.exists(dirname):
+    os.mkdir(dirname)
   if not os.path.exists(filename):
     os.system(r"touch {}".format(filename))
   log = open(filename, mode="a")

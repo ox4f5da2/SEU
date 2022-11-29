@@ -1,0 +1,4 @@
+pyppeteer==1.0.2
+requests==2.28.1
+asyncio==3.4.3
+ddddocr==1.4.7

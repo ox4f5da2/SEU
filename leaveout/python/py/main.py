@@ -15,7 +15,6 @@ def readTxt(path):
     读取文件
   """
   try:
-    print("{}/txt/{}".format(dir_path, path))
     with open("{}/txt/{}".format(dir_path, path), encoding="utf-8") as f:
       config = eval(f.read())
   except FileNotFoundError:
@@ -93,8 +92,8 @@ def xj(common, config, cookies, cnt, maxFailNum):
     response = requests.post(url=url, cookies=cookies, data=data)
     records = json.loads(response.content.decode())["datas"]["wdqjbg"]
     totalSize = records["totalSize"]
-    qj_records = [elem for elem in records["rows"] if elem["XJZT"] == "0"] # 获取未请假的记录
     currentTime = getCurrentTime()
+    qj_records = [elem for elem in records["rows"] if elem["XJZT"] == "0" and not (currentTime["XJRQ"] in elem["QJKSRQ"]) ] # 获取未请假的记录
     num = len(qj_records)
     flag = True
     for item in qj_records:
